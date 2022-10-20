@@ -13,9 +13,9 @@ proc checkLatestVersion(maven,proj: string): string=
 const minecraft_version* = "1.19.2"
 const version* = "0.1.0+" & minecraft_version
 const maven_group* = "io.github.offbeat_stuff"
-const archives_base_name* = "random_skyblock_mixins"
-const mod_name* = "Random Skyblock Mixins"
-const modid* = "random_skyblock_mixins"
+const archives_base_name* = "save_blocker"
+const mod_name* = "Save Blocker"
+const modid* = "save_blocker"
 
 let ModName = mod_name.replace(" ","")
 
@@ -37,7 +37,7 @@ assert tempa[1].split('-')[1] == minecraft_version
 let quilt_loader = checkLatestVersion(quilt_maven,"org/quiltmc/quilt-loader/")
 let loom_version = checkLatestVersion(quilt_maven,"org/quiltmc/loom/")
 
-let quilt_mapping_version = checkLatestVersion(quilt_maven,"org/quiltmc/quilt-mappings/")
+let quilt_mapping_version = "1.19.2+build.9" #checkLatestVersion(quilt_maven,"org/quiltmc/quilt-mappings/")
 assert quilt_mapping_version[0 .. minecraft_version.len() + 6] == minecraft_version & "+build."
 let quilt_mappings = quilt_mapping_version[minecraft_version.len() + 7 .. ^1]
 
