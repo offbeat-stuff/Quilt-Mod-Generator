@@ -37,7 +37,7 @@ assert tempa[1].split('-')[1] == minecraft_version
 let quilt_loader = checkLatestVersion(quilt_maven,"org/quiltmc/quilt-loader/")
 let loom_version = checkLatestVersion(quilt_maven,"org/quiltmc/loom/")
 
-let quilt_mapping_version = "1.19.2+build.9" #checkLatestVersion(quilt_maven,"org/quiltmc/quilt-mappings/")
+let quilt_mapping_version = "1.19.2+build.21" #checkLatestVersion(quilt_maven,"org/quiltmc/quilt-mappings/")
 assert quilt_mapping_version[0 .. minecraft_version.len() + 6] == minecraft_version & "+build."
 let quilt_mappings = quilt_mapping_version[minecraft_version.len() + 7 .. ^1]
 
