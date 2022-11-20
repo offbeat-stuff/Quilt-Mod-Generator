@@ -1,4 +1,5 @@
 import httpclient,strutils,maven
+import sequtils
 
 var client = newHttpClient()
 
@@ -7,14 +8,21 @@ proc checkLatestVersion(maven,proj,pattern: string): string=
   let data = client.getContent(url)
   let meta = loadMetadata(data)
   result = meta.findLatestMatch(pattern)
-  echo result
+  echo maven," - ",proj,"|> ",result
+
+proc checkLatestVersion(maven,proj: string): string=
+  let url = maven & proj & "maven-metadata.xml"
+  let data = client.getContent(url)
+  let meta = loadMetadata(data)
+  result = meta.latest
+  echo maven," - ",proj,"|> ",result
 
 const minecraft_version* = "1.19.2"
 const version* = "0.1.0+" & minecraft_version
 const maven_group* = "io.github.offbeat_stuff"
-const archives_base_name* = "carpet_sky_additions_world_gen"
-const mod_name* = "Carpet Sky Additions World Gen"
-const modid* = "carpet_sky_additions_world_gen"
+const archives_base_name* = "one_block_testing"
+const mod_name* = "One Block Testing"
+const modid* = "one_block_testing"
 
 let ModName = mod_name.replace(" ","")
 
@@ -26,8 +34,8 @@ let ModName = mod_name.replace(" ","")
 
 const quilt_maven = "https://maven.quiltmc.org/repository/release/"
 let quilted_api_version = checkLatestVersion(quilt_maven,"org/quiltmc/quilted-fabric-api/quilted-fabric-api/","*.*.*-beta.*+0.*.*-1.19.2")
-let quilt_loader = checkLatestVersion(quilt_maven,"org/quiltmc/quilt-loader/","0.*.*-beta.*")
-let loom_version = checkLatestVersion(quilt_maven,"org/quiltmc/loom/","*.*.*")
+let quilt_loader = checkLatestVersion(quilt_maven,"org/quiltmc/quilt-loader/")
+let loom_version = checkLatestVersion(quilt_maven,"org/quiltmc/loom/")
 let quilt_mapping_version = checkLatestVersion(quilt_maven,"org/quiltmc/quilt-mappings/","1.19.2+build.*")
 
 let tempa = quilted_api_version.split('+')
