@@ -17,41 +17,39 @@ proc checkLatestVersion(maven,proj: string): string=
   result = meta.latest
   echo maven," - ",proj,"|> ",result
 
-const minecraft_version* = "1.19.2"
-const version* = "0.1.0+" & minecraft_version
-const maven_group* = "io.github.offbeat_stuff"
-const archives_base_name* = "one_block_testing"
-const mod_name* = "One Block Testing"
-const modid* = "one_block_testing"
+const mc_version = "1.19.3"
+const version = "0.1.0+" & mc_version
+const maven_group = "io.github.offbeat_stuff"
+const archives_base_name = "one_block_testing"
+const mod_name = "One Block Testing"
+const modid = "one_block_testing"
 
 let ModName = mod_name.replace(" ","")
 
-# quilt_mappings = 3
-# quilt_loader = 0.17.1
-# qsl = 4.0.0-beta.12
-# fabric_api = 0.61.0
-# loom_version = 1.0.3
+# qfapi_version = 5.0.0-beta.2
+# fapi_version = 0.68.1-1.19.3
+# ql_version = 0.18.1-beta.22
+# qm_version = 1.19.3-rc1+build.4
+# loom_version = 1.0.8
 
 const quilt_maven = "https://maven.quiltmc.org/repository/release/"
-let quilted_api_version = checkLatestVersion(quilt_maven,"org/quiltmc/quilted-fabric-api/quilted-fabric-api/","*.*.*-beta.*+0.*.*-1.19.2")
-let quilt_loader = checkLatestVersion(quilt_maven,"org/quiltmc/quilt-loader/")
+let quilted_api_version = checkLatestVersion(quilt_maven,"org/quiltmc/quilted-fabric-api/quilted-fabric-api/")
+let ql_version = checkLatestVersion(quilt_maven,"org/quiltmc/quilt-loader/")
 let loom_version = checkLatestVersion(quilt_maven,"org/quiltmc/loom/")
-let quilt_mapping_version = checkLatestVersion(quilt_maven,"org/quiltmc/quilt-mappings/","1.19.2+build.*")
+let qm_version = checkLatestVersion(quilt_maven,"org/quiltmc/quilt-mappings/")
 
 let tempa = quilted_api_version.split('+')
 
-let qsl = tempa[0]
-let fabric_api = tempa[1].split('-')[0]
+let qfapi_version = tempa[0]
+let fapi_version = tempa[1]
 
-assert tempa[1].split('-')[1] == minecraft_version
-
-assert quilt_mapping_version[0 .. minecraft_version.len() + 6] == minecraft_version & "+build."
-let quilt_mappings = quilt_mapping_version[minecraft_version.len() + 7 .. ^1]
+assert fapi_version.split('-')[1] == mc_version
+assert qm_version.startsWith(mc_version)
 
 proc genGradleProperties*(): seq[string]=
   template addToResult(val: string)=
     result.add(astToStr(val) & " = " & val)
-  addToResult(minecraft_version)
+  addToResult(mc_version)
   addToResult(version)
   addToResult(maven_group)
   addToResult(archives_base_name)
@@ -59,11 +57,11 @@ proc genGradleProperties*(): seq[string]=
   addToResult(ModName)
   addToResult(modid)
 
-  addToResult(qsl)
-  addToResult(fabric_api)
+  addToResult(qfapi_version)
+  addToResult(fapi_version)
 
-  addToResult(quilt_loader)
-  addToResult(quilt_mappings)
+  addToResult(ql_version)
+  addToResult(qm_version)
   addToResult(loom_version)
 
 import os
